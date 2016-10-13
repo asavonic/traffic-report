@@ -1,0 +1,74 @@
+{
+    "users": {
+        "user1": {
+            "name": "User #1",
+            "lang": "ru_RU",
+            "contacts": [
+                {
+                    "type":  "phone",
+                    "value": "+7XXXXXXXXXX"
+                }
+            ],
+            "places": [
+                {
+                    "name": "Foo",
+                    "lat": 41.3233440,
+                    "lon": 59.356011,
+                    "size_x": 450,
+                    "size_y": 450,
+                    "zoom": 14,
+                    "mask_path": "/path/to/mask.png",
+                    "max_levels": {
+                        "AllGreen": {
+                            "green":  100,
+                            "yellow": 10,
+                            "red":    5
+                        },
+                        "Minor": {
+                            "green":  100,
+                            "yellow": 100,
+                            "red":    5
+                        },
+                        "BeCareful": {
+                            "green":  100,
+                            "yellow": 100,
+                            "red":    15
+                        },
+                        "NoWay": {
+                            "green":  100,
+                            "yellow": 100,
+                            "red":    30
+                        },
+                        "GetTheHellOutOfHere": {
+                            "green":  100,
+                            "yellow": 100,
+                            "red":    30
+                        }
+                    }
+                }
+            ]
+        }
+    },
+
+    "strings": {
+        "en_EN": {
+            "Greetings": "Hi,",
+            "AllGreen":  "No traffic at all.",
+            "Minor":     "It's just a little bit slow.",
+            "BeCareful": "Road is quite slow now, careful!",
+            "NoWay":     "Traffic jam!",
+            "GetTheHellOutOfHere": "You don't want to go here! It's a dead end!"
+
+        },
+        "ru_RU": {
+            "Greetings": "Привет.",
+            "AllGreen":  "Никаких пробок нет и не ожидается.",
+            "Minor":     "Чуть-чуть желтое, можно ехать.",
+            "BeCareful": "Уже есть красноые участки, осторожнее.",
+            "NoWay":     "Осторожно, там пробка!",
+            "GetTheHellOutOfHere": "Большая пробка! Даже не думай туда ехать!"
+
+        }
+
+    }
+}
