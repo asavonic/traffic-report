@@ -1,12 +1,13 @@
 import PIL.Image
 import PIL.ImageMath
 import urllib.request
+from io import BytesIO
 
 
 def load_img_url(url):
     req = urllib.request.urlopen(url)
-    data = req.read()
-    return PIL.Image.fromarray(data)
+    data = BytesIO(req.read())
+    return PIL.Image.open(data)
 
 
 def load_img_file(fname):

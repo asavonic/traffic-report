@@ -30,4 +30,4 @@ class ConfigPlace(object):
 
 def read_config(filename):
     with open(filename, 'r') as f:
-        return json.load(f)
+        return Config(json.load(f))

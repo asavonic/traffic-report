@@ -47,6 +47,8 @@ def decide_traffic_level(red, yellow, green):
 
 
 def get_traffic(mask_path, coord, area_size, zoom):
+    # area_name = client['area_name']
+
     map_img = image.load_img_url(make_map_url('trf', coord, area_size, zoom))
     mask_img = image.load_img_file(mask_path)
 
