@@ -1,2 +1,2 @@
-def send_report(report, client):
+def send_report(report):
     print(report)
