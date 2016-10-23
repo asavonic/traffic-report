@@ -31,4 +31,8 @@ def compute_histo_RYG(img, mask):
     quantized = masked.quantize(palette=palette)
     colors = quantized.getcolors()
 
-    return colors[1][0], colors[2][0], colors[3][0]
+    r = next((c[0] for c in colors if c[1] == 1), 0)
+    y = next((c[0] for c in colors if c[1] == 2), 0)
+    g = next((c[0] for c in colors if c[1] == 3), 0)
+
+    return r, y, g
