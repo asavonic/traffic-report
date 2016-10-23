@@ -1,4 +1,10 @@
 import image
+import logging
+import tempfile
+from os import path
+
+
+DEBUG = False
 
 
 def make_map_url(ty, coord, area_size, zoom):
@@ -47,7 +53,11 @@ def decide_traffic_level(red, yellow, green):
 
 
 def get_traffic(mask_path, coord, area_size, zoom):
-    # area_name = client['area_name']
+    if DEBUG:
+        log = logging.getLogger()
+        temp = tempfile.mkdtemp(prefix='traftrack')
+        log.debug('image dump directory: %s', temp)
+        image.DEBUG_DUMP_DIR = temp
 
     map_img = image.load_img_url(make_map_url('trf', coord, area_size, zoom))
     mask_img = image.load_img_file(mask_path)
@@ -58,5 +68,10 @@ def get_traffic(mask_path, coord, area_size, zoom):
     red = 100 * red / total
     yellow = 100 * yellow / total
     green = 100 * green / total
+
+    if DEBUG:
+        log.debug('traffic stats: red = %d%%, yellow = %d%%, green = %d%%',
+                  red, yellow, green)
+
 
     return decide_traffic_level(red, yellow, green)
