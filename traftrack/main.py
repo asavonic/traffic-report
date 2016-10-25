@@ -3,36 +3,44 @@
 Traffic tracker with SMS reporting
 
 Usage:
-  traftrack [--places=FILE] [--l10n=FILE --l10n-lang=LANG] [--debug]
+  traftrack --users=FILE --l10n=FILE [--verbosity=LEVEL]
 
 Options:
-  --places=FILE  path to the places description
-  --l10n=FILE    path to the localization file
-  --l10n-lang=LANG  language to use in localization [default: en_EN]
-  --debug        dump intermediate images and print debug messages
-'''
-import sys
-from docopt import docopt
-import logging
+  --users=FILE    path to the config with users descriptions
+  --l10n=FILE     path to the localization file
 
-import yamaps
-import reporter
+  --verbosity=LEVEL  logging level from 0 to 4 [default: 2]
+                       0 for only critical errors
+                       1 for all errors
+                       2 for all warnings
+                       3 for info messages (i.e. report have been sent to XXX)
+                       4 for full output with debug information
+'''
+import logging
+import sys
+
+from docopt import docopt
+
 import config
+import yamaps
 
 
 def main(argv):
     args = docopt(__doc__, argv=argv, version='0.1')
-    places = config.read_places(args['--places'])
-    debug = args['--debug']
-    set_logger(debug)
-    yamaps.DEBUG = debug
 
-    if args['--l10n']:
-        lang = args['--l10n-lang']
-        l10n = config.read_l10n(args['--l10n']).get(lang)
-    else:
-        l10n = None
+    users = config.read_users_config(args['--users'])
+    l10n = config.read_l10n(args['--l10n'])
+    log_level = 50 - 10 * max(0, min(4, int(args['--verbosity'])))
+    set_logger(log_level)
 
+    for uid, u in users.items():
+        report = create_report(config.read_places(u['places_config']),
+                               l10n.get(u['lang']))
+        send_report(u, report)
+        logging.getLogger().info('Report have been sent to %s', uid)
+
+
+def create_report(places, l10n):
     traffic = {}
     for place in places:
         traffic[place.name] = yamaps.get_traffic(
@@ -40,26 +48,29 @@ def main(argv):
             place.coord,
             place.size,
             place.zoom)
-
-    reporter.send_report(format_report(traffic, l10n))
+    return format_report(traffic, l10n)
 
 
 def format_report(traffic_level_map, l10n):
-    msg = l10n['Greetings'] if l10n else ''
+    msg = l10n['Greetings']
 
     for place in sorted(traffic_level_map):
         traffic_level = traffic_level_map[place]
-        if l10n:
-            traffic_level = l10n(traffic_level)
-        msg += " {}: {}".format(place, traffic_level)
+        msg += " {}: {}".format(l10n.get(place, place),
+                                l10n[traffic_level])
     return msg
 
 
-def set_logger(debug):
-    if debug:
-        f = '%(asctime)-15s %(message)s'
-        logging.basicConfig(format=f)
-        logging.getLogger().setLevel(logging.DEBUG)
+def send_report(user, report):
+    logging.getLogger().debug('Sending SMS to %s: %s',
+                              user['phone'], report)
+
+
+def set_logger(level):
+    f = '%(asctime)-15s %(message)s'
+    logging.basicConfig(format=f)
+    logging.getLogger().setLevel(level)
+
 
 
 if __name__ == '__main__':
