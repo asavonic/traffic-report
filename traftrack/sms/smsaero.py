@@ -3,13 +3,14 @@
 #  This file was originally taken from:
 #    https://smsaero.ru/api/class-python/
 #
-import json
-import time
-import requests
 import hashlib
 import json
-from urlparse import urljoin
+import logging
+import time
 from datetime import datetime
+from urllib.parse import urljoin
+
+import requests
 
 
 class SmsAeroError(Exception):
@@ -23,7 +24,7 @@ class SmsAeroHTTPError(SmsAeroError):
 
 
 class SmsAero(object):
-    URL_GATE = 'http://gate.smsaero.ru/'
+    URL_GATE = 'https://gate.smsaero.ru/'
     SIGNATURE = 'NEWS'
     DIGITAL = 0
     TYPE_SEND = 2
@@ -38,7 +39,7 @@ class SmsAero(object):
         self.session = requests.session()
 
         m = hashlib.md5()
-        m.update(passwd)
+        m.update(passwd.encode('utf-8'))
         self.passwd = m.hexdigest()
 
     def _request(self, selector, data):
@@ -50,6 +51,7 @@ class SmsAero(object):
         url = urljoin(self.url_gate, selector)
 
         try:
+            logging.getLogger().debug('POST: %s with data: %s', url, data)
             response = self.session.post(url, data=data)
         except requests.RequestException as err:
             raise SmsAeroHTTPError(err)
@@ -61,7 +63,7 @@ class SmsAero(object):
 
     def _check_response(self, content):
         try:
-            response = json.loads(content)
+            response = json.loads(content.decode('utf-8'))
             if 'result' in response and response['result'] == u'reject':
                 raise SmsAeroError(response['reason'])
             elif 'result' in response and response['result'] == u'no credits':
@@ -74,8 +76,11 @@ class SmsAero(object):
             else:
                 raise SmsAeroError('unexpected format is received')
 
-    def send(self, to, text, date=None, signature=SIGNATURE,
+    def send(self, to, text, date=None, signature=None,
              digital=DIGITAL, type_send=TYPE_SEND):
+        if signature is None:
+            signature = self.signature
+
         data = {
             'from': signature,
             'digital': digital,
@@ -91,63 +96,3 @@ class SmsAero(object):
                 raise SmsAeroError('param `date` is not datetime object')
 
         return self._request('/send/', data)
-
-    def sendtogroup(self, group, text, date=None, signature=SIGNATURE,
-                    digital=DIGITAL, type_send=TYPE_SEND):
-        data = {
-            'from': signature,
-            'digital': digital,
-            'type_send': type_send,
-            'group': group,
-            'text': text,
-        }
-
-        if date is not None:
-            if isinstance(date, datetime):
-                data['date'] = int(time.mktime(date.timetuple()))
-            else:
-                raise SmsAeroError('param `date` is not datetime object')
-
-        return self._request('/sendtogroup/', data)
-
-    def status(self, id):
-        return self._request('/status/', {'id': id})
-
-    def checksending(self, id):
-        return self._request('/checksending/', {'id': id})
-
-    def balance(self):
-        return self._request('/balance/', {})
-
-    def checktarif(self):
-        return self._request('/checktarif/', {})
-
-    def senders(self):
-        return self._request('/senders/', {})
-
-    def sign(self, sign):
-        return self._request('/sign/', {'sign': sign})
-
-    def checkgroup(self):
-        return self._request('/checkgroup/', {})
-
-    def addgroup(self, group):
-        return self._request('/addgroup/', {'group': group})
-
-    def delgroup(self, group):
-        return self._request('/delgroup/', {'group': group})
-
-    def addphone(self, phone, group=None):
-        data = {'phone': phone} if group is None \
-            else {'phone': phone, 'group': group}
-
-        return self._request('/addphone/', data)
-
-    def delphone(self, phone, group=None):
-        data = {'phone': phone} if group is None \
-            else {'phone': phone, 'group': group}
-
-        return self._request('/delphone/', data)
-
-    def addblacklist(self, phone):
-        return self._request('/addblacklist/', {'phone': phone})

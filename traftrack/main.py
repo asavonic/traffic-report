@@ -4,6 +4,7 @@ Traffic tracker with SMS reporting
 
 Usage:
   traftrack --users=FILE --l10n=FILE [--verbosity=LEVEL]
+            ([--dry-run]|--smsaero=FILE)
 
 Options:
   --users=FILE    path to the config with users descriptions
@@ -15,6 +16,9 @@ Options:
                        2 for all warnings
                        3 for info messages (i.e. report have been sent to XXX)
                        4 for full output with debug information
+
+  --dry-run  do not actually send any sms, just print what will be done
+  --smsaero=FILE  config file with smsaero credentials
 '''
 import logging
 import sys
@@ -23,6 +27,7 @@ from docopt import docopt
 
 import config
 import yamaps
+from sms import smsaero
 
 
 def main(argv):
@@ -33,10 +38,22 @@ def main(argv):
     log_level = 50 - 10 * max(0, min(4, int(args['--verbosity'])))
     set_logger(log_level)
 
+    if args['--smsaero']:
+        cred = config.read_smsaero(args['--smsaero'])
+        api = smsaero.SmsAero(cred['user'], cred['password'],
+                              signature=cred['signature'])
+
     for uid, u in users.items():
         report = create_report(config.read_places(u['places_config']),
                                l10n.get(u['lang']))
-        send_report(u, report)
+        if not args['--dry-run']:
+            try:
+                send_report(u, report, api)
+            except smsaero.SmsAeroError as e:
+                logging.getLogger().error('SMSAero error %s', e)
+                continue
+        else:
+            logging.getLogger().info('Report message: %s', report)
         logging.getLogger().info('Report have been sent to %s', uid)
 
 
@@ -61,16 +78,17 @@ def format_report(traffic_level_map, l10n):
     return msg
 
 
-def send_report(user, report):
+def send_report(user, report, api):
     logging.getLogger().debug('Sending SMS to %s: %s',
                               user['phone'], report)
+    result = api.send(user['phone'], report)
+    logging.getLogger().debug('Send result: %s', result)
 
 
 def set_logger(level):
     f = '%(asctime)-15s %(message)s'
     logging.basicConfig(format=f)
     logging.getLogger().setLevel(level)
-
 
 
 if __name__ == '__main__':

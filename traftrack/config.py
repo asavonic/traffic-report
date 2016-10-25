@@ -32,3 +32,8 @@ class L10n(object):
 def read_l10n(fname):
     with open(fname, 'r') as f:
         return L10n(json.load(f))
+
+
+def read_smsaero(fname):
+    with open(fname) as f:
+        return json.load(f)
