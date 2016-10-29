@@ -133,3 +133,55 @@ For example, if we have a 10% of red, 50% of yellow and 40% of green, we decide 
 }
 ```
 
+### users.json
+Configuration file with information about the users. Every user can have his own places.json config.
+```json
+{
+    "user1" : {
+        "places_config": "places1.json",
+        "lang": "en_US",
+        "phone": "+1XXXXXXXXXX"
+    },
+    "user2" : {
+        "places_config": "places2.json",
+        "lang": "ru_RU",
+        "phone": "+7XXXXXXXXXX"
+    }
+}
+```
+
+### l10n.json
+Localization strings. Every string has an ID and if you add an ID with a place name, places will be localized too.
+```json
+{
+    "en_EN": {
+        "Greetings": "Hi,",
+        "AllGreen":  "No traffic at all.",
+        "Minor":     "It's just a little bit slow.",
+        "BeCareful": "Road is quite slow now, careful!",
+        "NoWay":     "Traffic jam!",
+        "GetTheHellOutOfHere": "You don't want to go here! It's a dead end!"
+    },
+    "ru_RU": {
+        "Greetings": "Привет.",
+        "AllGreen":  "Все свободно.",
+        "Minor":     "Можно ехать.",
+        "BeCareful": "Небольшая пробка.",
+        "NoWay":     "Осторожно, там пробка!",
+        "GetTheHellOutOfHere": "Большая пробка! Даже не думай туда ехать!",
+
+        "Place #1": "Место #1",
+        "Place #2": "Место #2"
+    }
+}
+```
+
+### smsaero.json
+Configuration file with SMSAero credentials. Check with the [documentation](https://smsaero.ru/api/description/) on how to obtain username and password.
+```json
+{
+    "user":"some.name@server.com",
+    "password": "xxxxxxxxx",
+    "signature": "TRAFFIC"
+}
+```
