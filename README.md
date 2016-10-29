@@ -33,13 +33,13 @@ with the lattitude, longitude, zoom and the size of your location.
 ```
 https://static-maps.yandex.ru/1.x/?lang=en_US&ll={lat}%2C{lon}&z={zoom}&l=map&size={size_x},{size_y}
 ```
-For a previus example it will give you a [link]:
-TBD: image
+For a previus example it will give you a [link]:<br>
+![alt text](https://github.com/asavonic/traftrack/blob/master/doc/images/example-orig.png "example-orig.png")
 
-Then use your favorite image editor and create a mask for every road you need to track, for example:
-TBD: images
+Then use your favorite image editor and create a mask for every road you need to track, for example:<br>
+![alt text](https://github.com/asavonic/traftrack/blob/master/doc/images/example-mask1.png) ![alt text](https://github.com/asavonic/traftrack/blob/master/doc/images/example-mask2.png)
 
-We will use them in places.json
+We will use these masks in places.json config.
 
 ### places.json
 This configuration file describes the places to track.
