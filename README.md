@@ -5,7 +5,7 @@ and can be configured to watch for any place you need and serve many users.
 ## Installation
 ### Requirements
 - Python 3
-- PIL (or Pillow)
+- PIL (Pillow)
 
 You only need to clone the repository and you are ready to go.<br>
 TBD: python package
