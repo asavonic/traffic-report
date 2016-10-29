@@ -1,0 +1,76 @@
+{
+    "places": [
+        {
+            "name": "Place #1",
+            "lat": 43.933837,
+            "lon": 56.336255,
+            "size_x": 450,
+            "size_y": 450,
+            "zoom": 14,
+            "mask_path": "/path/to/mask-1.png",
+            "max_levels": {
+                "AllGreen": {
+                    "green":  100,
+                    "yellow": 10,
+                    "red":    5
+                },
+                "Minor": {
+                    "green":  100,
+                    "yellow": 100,
+                    "red":    5
+                },
+                "BeCareful": {
+                    "green":  100,
+                    "yellow": 100,
+                    "red":    15
+                },
+                "NoWay": {
+                    "green":  100,
+                    "yellow": 100,
+                    "red":    30
+                },
+                "GetTheHellOutOfHere": {
+                    "green":  100,
+                    "yellow": 100,
+                    "red":    100
+                }
+            }
+        },
+        {
+            "name": "Place #2",
+            "lat": 43.933837,
+            "lon": 56.336255,
+            "size_x": 450,
+            "size_y": 450,
+            "zoom": 14,
+            "mask_path": "/path/to/mask-1.png",
+            "max_levels": {
+                "AllGreen": {
+                    "green":  100,
+                    "yellow": 10,
+                    "red":    5
+                },
+                "Minor": {
+                    "green":  100,
+                    "yellow": 100,
+                    "red":    5
+                },
+                "BeCareful": {
+                    "green":  100,
+                    "yellow": 100,
+                    "red":    15
+                },
+                "NoWay": {
+                    "green":  100,
+                    "yellow": 100,
+                    "red":    30
+                },
+                "GetTheHellOutOfHere": {
+                    "green":  100,
+                    "yellow": 100,
+                    "red":    30
+                }
+            }
+        }
+    ]
+}

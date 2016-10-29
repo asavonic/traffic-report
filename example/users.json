@@ -1,0 +1,12 @@
+{
+    "user1" : {
+        "places_config": "places1.json",
+        "lang": "en_US",
+        "phone": "+1XXXXXXXXXX"
+    },
+    "user2" : {
+        "places_config": "places2.json",
+        "lang": "ru_RU",
+        "phone": "+7XXXXXXXXXX"
+    }
+}

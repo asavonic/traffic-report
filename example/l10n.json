@@ -1,0 +1,21 @@
+{
+    "en_EN": {
+        "Greetings": "Hi,",
+        "AllGreen":  "No traffic at all.",
+        "Minor":     "It's just a little bit slow.",
+        "BeCareful": "Road is quite slow now, careful!",
+        "NoWay":     "Traffic jam!",
+        "GetTheHellOutOfHere": "You don't want to go here! It's a dead end!"
+    },
+    "ru_RU": {
+        "Greetings": "Привет.",
+        "AllGreen":  "Все свободно.",
+        "Minor":     "Можно ехать.",
+        "BeCareful": "Небольшая пробка.",
+        "NoWay":     "Осторожно, там пробка!",
+        "GetTheHellOutOfHere": "Большая пробка! Даже не думай туда ехать!",
+
+        "Place #1": "Место #1",
+        "Place #2": "Место #2"
+    }
+}
